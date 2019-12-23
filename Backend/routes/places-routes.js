@@ -1,52 +1,15 @@
 const express=require('express');
 const router=express.Router();
+const placesController = require('../controllers/places-controllers');
 
-const HttpError = require('../models/http-error');
+router.get("/:pid",placesController.getPlaceById);
 
-const DUMMY_PLACES=[
-    {
-        id:'p1',
-        title:'Emp Building',
-        description:'One of the most Famous Building',
-        location:{
-            lat:40.70,
-            lng:-73.98
-        },
-        address:'20 W 30 Street, NY, USA',
-        creator:'u1'
-    }
-];
+router.get("/user/:uid",placesController.getPlacesByUserId);
 
-router.get("/:pid",(req,res,next)=>{
-    const placeId=req.params.pid;
+router.post("/", placesController.createPlace);
 
-    const place=DUMMY_PLACES.find(p=>{
-        return p.id === placeId;
-    })
+router.patch("/:pid", placesController.updatePlace);
 
-    if(!place){
-        return next(
-            new HttpError('Could not find a place with given Place Id',404)
-        );
-    }
-
-    res.json({place});
-});
-
-router.get("/user/:uid",(req,res,next)=>{
-    const userId=req.params.uid;
-
-    const places=DUMMY_PLACES.find(p=>{
-        return p.creator === userId;
-    });
-
-    if(!places){
-        return next(
-            new HttpError('Could not find any place for the user with the specified user ID',404)
-        );
-    }
-
-    res.json({places});
-});
+router.delete("/:pid", placesController.deletePlace);
 
 module.exports=router;
