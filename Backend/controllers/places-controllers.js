@@ -82,7 +82,7 @@ const updatePlace = (req,res,next) =>{
   {
       throw new HttpError('Invalid inputs passed, Please check the Data Passed',422);
   }
-  
+
   const {title,description} = req.body;
   const placeId=req.params.pid;
 
@@ -100,6 +100,11 @@ const updatePlace = (req,res,next) =>{
 //Route 5 to Delete
 const deletePlace = (req,res,next) => {
    const placeId=req.params.pid;
+
+   if(!DUMMY_PLACES.find(p=> p.id === placeId)){
+       throw new HttpError('Could Not find a place with that Id',404);
+   }
+   
    DUMMY_PLACES=DUMMY_PLACES.filter(p=>p.id===placeId);
 
    res.status(200).json({message:'Deleted Place'});
