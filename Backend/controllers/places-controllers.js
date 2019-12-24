@@ -1,4 +1,5 @@
 const HttpError= require('../models/http-error');
+const {validationResult} = require('express-validator');
 const uuid= require('uuid/v4');
 
 let DUMMY_PLACES=[
@@ -51,6 +52,12 @@ const getPlacesByUserId = (req,res,next)=>{
 
 //Route 3
 const createPlace = (req,res,next) =>{
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()){
+      throw new HttpError('Invalid inputs passed, Please Check Your Data', 422);
+    }
+
    const {title,description,coordinates,address,creator} = req.body;
 
    const createdPlace = {
@@ -69,6 +76,13 @@ const createPlace = (req,res,next) =>{
 
 //Route 4 to Update
 const updatePlace = (req,res,next) =>{
+  const errors= validationResult(req);
+
+  if(!errors.isEmpty())
+  {
+      throw new HttpError('Invalid inputs passed, Please check the Data Passed',422);
+  }
+  
   const {title,description} = req.body;
   const placeId=req.params.pid;
 
