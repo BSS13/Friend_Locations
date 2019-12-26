@@ -2,7 +2,6 @@ const HttpError= require('../models/http-error');
 const {validationResult} = require('express-validator');
 const User = require('../models/user');
 
-
 //Route to fetch all the Users
 const getUsers = async (req,res,next)=>{
     let users;
@@ -24,7 +23,7 @@ const signup = async (req,res,next) =>{
         return next (new HttpError('Invalid Inputs passed, please check the data passed in ',422));
     }
     
-    const {name,email,password, places} = req.body;
+    const {name,email,password} = req.body;
 
     let existingUser;
     try{
@@ -45,7 +44,7 @@ const signup = async (req,res,next) =>{
         email,
         password,
         image:'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-        places
+        places:[]
     });
 
     try{
