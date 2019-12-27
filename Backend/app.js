@@ -30,6 +30,6 @@ app.use((error,req,res,next)=>{
     res.json({message:error.message || 'An Unknown Error Occured!!!!!!'});
 });
 
-mongoose.connect('mongodb+srv://bssa:Praisethelord13@locationuploader-quvn2.mongodb.net/places?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://bssa:Praisethelord13@locationuploader-quvn2.mongodb.net/mern?retryWrites=true&w=majority')
 .then(() => {app.listen(5000)})
 .catch(err => console.log(err));
