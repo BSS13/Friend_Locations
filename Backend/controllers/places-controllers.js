@@ -2,20 +2,8 @@ const HttpError= require('../models/http-error');
 const {validationResult} = require('express-validator');
 const getCoordsForAddress = require('../util/location');
 const Place = require('../models/place');
-
-let DUMMY_PLACES=[
-    {
-        id:'p1',
-        title:'Emp Building',
-        description:'One of the most Famous Building',
-        location:{
-            lat:40.70,
-            lng:-73.98
-        },
-        address:'20 W 30 Street, NY, USA',
-        creator:'u1'
-    }
-];
+const User = require('../models/user');
+const mongoose = require('mongoose');
 
 const getPlaceById = async (req,res,next)=>{
     const placeId=req.params.pid;
@@ -80,8 +68,27 @@ const createPlace = async (req,res,next) =>{
        creator
    });
 
+   let user;
    try{
-       await createdPlace.save();
+       user = await User.findById(creator);
+   }catch(err){
+       const error = new HttpError('Finding User Operation Not Successfull!!',500);
+       return next(error);
+   }
+
+   if(!user){
+       const error = new HttpError('Could not Find a User with the specified ID',404);
+       return next(error);
+   }
+
+   try{
+       const sess = await mongoose.startSession();
+       sess.startTransaction();
+       await createdPlace.save({session:sess});
+       user.places.push(createdPlace);
+
+       await user.save({session:sess});
+       await sess.commitTransaction();
    }catch(err){
        const error = new HttpError('Creating Place Operation Failed',500);
        return next(error);
@@ -142,9 +149,6 @@ const deletePlace = async (req,res,next) => {
        const error = new HttpError('Could Not complete the Delete Operation Successfully !!');
        return next(error);
    }
-
-   
-   DUMMY_PLACES=DUMMY_PLACES.filter(p=>p.id===placeId);
 
    res.status(200).json({message:'Deleted Place'});
 };
