@@ -39,5 +39,5 @@ app.use((error,req,res,next)=>{
 });
 
 mongoose.connect('mongodb+srv://bssa:Praisethelord13@locationuploader-quvn2.mongodb.net/mern?retryWrites=true&w=majority')
-.then(() => {app.listen(5000)})
+.then(() => {app.listen(5000); console.log("Server Started");})
 .catch(err => console.log(err));

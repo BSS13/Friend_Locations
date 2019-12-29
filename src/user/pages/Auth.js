@@ -68,7 +68,7 @@ const Auth = ()=>{
           auth.login();
         }catch(err){
           setIsLoading(false);
-          setError(err.message || 'Issue in Executing Login Operation');
+          setError(err.message || 'Issue in execution');
         }
 
         //Logic for Sign Up Checking

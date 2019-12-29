@@ -62,13 +62,13 @@ const login = async(req,res,next) =>{
 
     let existingUser;
     try{
-        existingUser = await User.findOne({email:email})
+        existingUser = await User.findOne({email:email});
     }catch(err){
         const error= new HttpError('Operation to search User Failed, Please Try Again Later',500);
         return next(error);
     }
 
-    if(!existingUser || existingUser.password !== password){
+    if(!existingUser || existingUser.password !== password ){
         const error = new HttpError('Invalid Credentials, Please Try Again',401);
         return next(error);
     }
