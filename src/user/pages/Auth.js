@@ -107,7 +107,7 @@ const Auth = ()=>{
           )}
 
         <Input id="email" element="input" type="email" label="E-Mail" placeholder="Email" validators={[VALIDATOR_EMAIL()]} onInput={inputHandler} errorText="Please Enter a Valid Email Address"/>
-        <Input id="password" element="input" type="password" label="Password" placeholder="Password" validators={[VALIDATOR_MINLENGTH(6)]} onInput={inputHandler} errorText="Please Enter a Password that is atleast 5 characters long"/>
+        <Input id="password" element="input" type="password" label="Password" placeholder="Password" validators={[VALIDATOR_MINLENGTH(6)]} onInput={inputHandler} errorText="Please Enter a Password that is atleast 6 characters long"/>
         <Button type="submit" disabled={!formState.isValid}> {isLoginMode? 'Login' : 'Signup'}</Button>
      </form>  
 
