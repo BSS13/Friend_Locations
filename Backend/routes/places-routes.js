@@ -2,12 +2,13 @@ const express=require('express');
 const router=express.Router();
 const placesController = require('../controllers/places-controllers');
 const {check} = require('express-validator');
+const fileUpload = require('../middleware/file-upload');
 
 router.get("/:pid",placesController.getPlaceById);
 
 router.get("/user/:uid",placesController.getPlacesByUserId);
 
-router.post("/", [
+router.post("/", fileUpload.single('image'),[
     check('title').not().isEmpty(),
     check('description').isLength({min:5}),
     check('address').not().isEmpty()
