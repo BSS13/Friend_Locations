@@ -9,6 +9,7 @@ import './Auth.css';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import {useHttpClient} from '../../shared/hooks/http-hook';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 
 const Auth = ()=>{
   const auth = useContext(AuthContext);
@@ -30,13 +31,18 @@ const Auth = ()=>{
     if(!isLoginMode){
       setFormData({
         ...formState.inputs,
-        name:undefined
+        name:undefined,
+        image:undefined
       }, formState.inputs.email.isValid && formState.inputs.password.isValid);
     }else{
       setFormData({
         ...formState.inputs,
         name:{
           value:'',
+          isValid:false
+        },
+        image:{
+          value:null,
           isValid:false
         }
       },false);
@@ -105,6 +111,8 @@ const Auth = ()=>{
            onInput={inputHandler}
            />
           )}
+
+          {!isLoginMode && <ImageUpload center id="image" onInput={inputHandler} errorText="Please add an Image"/>}
 
         <Input id="email" element="input" type="email" label="E-Mail" placeholder="Email" validators={[VALIDATOR_EMAIL()]} onInput={inputHandler} errorText="Please Enter a Valid Email Address"/>
         <Input id="password" element="input" type="password" label="Password" placeholder="Password" validators={[VALIDATOR_MINLENGTH(6)]} onInput={inputHandler} errorText="Please Enter a Password that is atleast 6 characters long"/>

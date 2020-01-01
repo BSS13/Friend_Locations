@@ -8,13 +8,13 @@ const ImageUpload = props =>{
     const [file,setFile] = useState();
     const [previewUrl,setPreviewUrl] = useState();
     const [isValid,setIsValid] =useState(false);
+    
 
     useEffect(()=>{
         if(!file){
             return;
         }
-
-        const fileReader = new fileReader();
+        const fileReader = new FileReader();
         fileReader.onload = () =>{
             setPreviewUrl(fileReader.result);
         }
@@ -48,7 +48,12 @@ const ImageUpload = props =>{
 
             <div className={`image-upload ${props.center && 'center'}`}>
                 <div className="image-upload__preview">
-                    <img src="" alt="Preview"/>
+                    {previewUrl && <img src={previewUrl} alt="Preview"/>}
+                    {!previewUrl && <p>Please Pick an Image</p>}
+                </div>
+
+                <div>
+                    {!isValid && <p>{props.errorText}</p>}
                 </div>
 
                 <Button type="button" onClick={pickImageHandler}>Pick Image</Button>
