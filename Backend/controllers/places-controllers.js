@@ -4,6 +4,7 @@ const getCoordsForAddress = require('../util/location');
 const Place = require('../models/place');
 const User = require('../models/user');
 const mongoose = require('mongoose');
+const fs = require('fs');
 
 const getPlaceById = async (req,res,next)=>{
     const placeId=req.params.pid;
@@ -159,6 +160,12 @@ const deletePlace = async (req,res,next) => {
        const error = new HttpError('Could Not complete the Delete Operation Successfully !!');
        return next(error);
    }
+
+   const imagePath = place.image;
+
+   fs.unlink(imagePath ,err =>{
+       console.log(err);
+   })
 
    res.status(200).json({message:'Deleted Place'});
 };
