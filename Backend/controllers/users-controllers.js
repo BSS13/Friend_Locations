@@ -2,6 +2,7 @@ const HttpError= require('../models/http-error');
 const {validationResult} = require('express-validator');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 //Route to fetch all the Users
 const getUsers = async (req,res,next)=>{
@@ -62,7 +63,15 @@ const signup = async (req,res,next) =>{
         const error = new HttpError('Error in completing the Signup Operation!! Please Try Again',500);
         return next(error);
     }
-    res.status(201).json({user:createdUser.toObject({getters:true})});
+
+    let token;
+    try{
+        token = jwt.sign({userId:createdUser.id,email:createdUser.email}, 'supersecret_not_to_be_shared',{expiresIn:'1h'});
+    }catch(err){
+        const error = new HttpError('Signup Failed',500);
+        return next(error);
+    }
+    res.status(201).json({userId:createdUser.id,email:createdUser.email,token:token});
 }
 
 //Route to complete the Login
@@ -95,7 +104,15 @@ const login = async(req,res,next) =>{
         return next(error);
     }
 
-    res.json({msg:'Logged In', user: existingUser.toObject({getters:true})});
+    let token;
+    try{
+        token = jwt.sign({userId:existingUser.id,email:existingUser.email},'supersecret_not_to_be_shared', {expiresIn:'1h'});
+    }catch(err){
+        const error = new HttpError('Login operation not Successfull',500);
+        return next(error);
+    }
+
+    res.json({userId:existingUser.id,email:existingUser.email,token:token});
 }
 
 exports.getUsers=getUsers;
