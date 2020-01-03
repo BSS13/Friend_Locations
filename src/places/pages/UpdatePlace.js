@@ -53,21 +53,7 @@ const UpdatePlace = async (props) =>{
       fetchPlace();
     },[sendRequest,placeId,setFormData]);
 
-    if(isLoading){
-      return(
-        <div className="center">
-          <LoadingSpinner/>
-        </div>
-      )
-    }
-
-    if(!loadedPlace && !error){
-        return <div className="center">
-          <Card>
-            <h2>Could Not Find any such Place!</h2>
-          </Card>
-        </div>
-    }
+    
 
     const placeUpdateSubmitHandler = async (event) => {
       event.preventDefault();
@@ -85,7 +71,23 @@ const UpdatePlace = async (props) =>{
       }catch(err){}
     };
 
-    return <React.Fragment>
+    if(isLoading){
+      return(
+        <div className="center">
+          <LoadingSpinner/>
+        </div>
+      )
+    }
+
+    if(!loadedPlace && !error){
+        return <div className="center">
+          <Card>
+            <h2>Could Not Find any such Place!</h2>
+          </Card>
+        </div>
+    }
+
+    return (<React.Fragment>
       <ErrorModal error={error} onClear={clearError}/>
       {!isLoading && loadedPlace && <form className="place-form" onSubmit={placeUpdateSubmitHandler}>
         <Input 
@@ -113,7 +115,7 @@ const UpdatePlace = async (props) =>{
 
         <Button type="submit" disabled={!formState.isValid}>Update Place</Button>
     </form>}
-    </React.Fragment>
+    </React.Fragment>)
 };
 
 export default UpdatePlace;
